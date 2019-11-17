@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+	<nav class="nav-wrapper">
+		<div class="right">Current Response Code: <%= responseCode %></div>
+	</nav>
+	<div class="container section">
+		<ul class="collapsible">
+			<% for (var i = 0; i < requestHistory.length;  i++ ) { %>
+			<% var historicRequest = requestHistory[i] %>
+			<li>
+				<div class="collapsible-header">
+					<h6 style="display: flex;justify-content: space-between;width: 100%;">
+						<b style="padding-right: .2em;font-size: 1.3em;"><%= historicRequest.request.method %> <%= historicRequest.request.url %></b>
+						<span><%= (new Date(historicRequest.createdAt)).toDateString() %> @ <%= (new Date(historicRequest.createdAt)).toTimeString().slice(0, 8) %></span>
+					</h6>
+					</div>
+				<div class="collapsible-body">
+					<p>URL: <%= historicRequest.request.url %></p>
+					<p role="label">Request Headers</p>
+					<div class="card grey lighten-4">
+						<div class="card-content">
+							<%= JSON.stringify(historicRequest.request.headers) %>
+						</div>
+					</div>
+					<p role="label">Request Body</p>
+					<div class="card grey lighten-4">
+						<div class="card-content">
+							<%= JSON.stringify(historicRequest.request.body) %>
+						</div>
+					</div>
+					<p role="label">Request Query Params</p>
+					<div class="card grey lighten-4">
+						<div class="card-content">
+							<%= JSON.stringify(historicRequest.request.query) %>
+						</div>
+					</div>
+					<p>Response: <%= historicRequest.response.status %></p>
+					<% if(historicRequest.response.body && historicRequest.response.status == 200){ %>
+					<p role="label">Response Body</p>
+					<div class="card grey lighten-4">
+						<div class="card-content">
+							<%= JSON.stringify(historicRequest.response.body) %>
+						</div>
+					</div>
+					<% } %>
+					<% if(historicRequest.response.message && historicRequest.response.status != 200){ %>
+					<p role="label">Response Body</p>
+					<div class="card grey lighten-4">
+						<div class="card-content">
+							<%= historicRequest.response.message %>
+						</div>
+					</div>
+					<% } %>
+				</div>
+			</li>
+			<% } %>
+		</ul>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.collapsible').collapsible();
+		});
+	</script>
+</body>
+</html>
