@@ -29,6 +29,8 @@ app.route('/report')
 })
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json({limit: '20gb'}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.route('*')
 .all(function (req, res) {
 	if (req.url.match('favicon')) { return res.send('') }
